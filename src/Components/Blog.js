@@ -6,7 +6,8 @@ import {
   setDoc,
   doc,
   getDocs,
-  onSnapshot
+  onSnapshot,
+  deleteDoc
 } from "firebase/firestore";
 
 // Reducer function to manage blogs state
@@ -89,7 +90,9 @@ export default function Blog() {
   }
 
   // Remove a blog from the state
-  function removeBlog(i) {
+  async function removeBlog(i) {
+    const docRef = doc(db, "blogs", i);
+    await deleteDoc(docRef);
     dispatch({ type: "REMOVE", index: i });
   }
 
@@ -148,7 +151,10 @@ export default function Blog() {
             <p>{blog.content}</p>
 
             <div className="blog-btn">
-              <button onClick={() => removeBlog(index)} className="btn remove">
+              <button
+                onClick={() => removeBlog(blog.id)}
+                className="btn remove"
+              >
                 Delete
               </button>
             </div>
